@@ -7,12 +7,12 @@ from datetime import datetime
 
 def main():
     scheduler = BlockingScheduler()
-    scheduler.add_job(fetch, 'cron', hour=17, minute=58)
+    scheduler.add_job(fetch, 'cron', hour=22, minute=13)
     scheduler.start()
 
 
 def fetch():
-    all = {'OGPUT': {}, 'OGCALL': {}}
+    all = {'Put': {}, 'Call': {}}
     resp = requests.get(
         'https://www.cmegroup.com/daily_bulletin/current/Section64_Metals_Option_Products.pdf')
     with open('Section64_Metals_Option_Products.pdf', 'wb') as f:
@@ -22,21 +22,21 @@ def fetch():
             page_data = page.extract_text()
             Put(all, page_data)
             Call(all, page_data)
-    result = {'OGPUT': {}, 'OGCALL': {}}
-    for m in all['OGPUT']:
-        data = all['OGPUT'][m]['DATA']
+    result = {'Put': {}, 'Call': {}}
+    for m in all['Put']:
+        data = all['Put'][m]['Data']
         data.sort(key=lambda s: s[1], reverse=True)
-        result['OGPUT'] = {
-            'TOTAL': all['OGPUT'][m]['TOTAL'],
-            'RANK': data[:6],
+        result['Put'] = {
+            'Total': all['Put'][m]['Total'],
+            'Rank': data[:6],
         }
         break
-    for m in all['OGCALL']:
-        data = all['OGCALL'][m]['DATA']
+    for m in all['Call']:
+        data = all['Call'][m]['Data']
         data.sort(key=lambda s: s[1], reverse=True)
-        result['OGCALL'] = {
-            'TOTAL': all['OGCALL'][m]['TOTAL'],
-            'RANK': data[:6],
+        result['Call'] = {
+            'Total': all['Call'][m]['Total'],
+            'Rank': data[:6],
         }
         break
     try:
@@ -61,23 +61,23 @@ def Put(all, page_data):
             if l[0].isdigit() == False:
                 continue
             if l[len(l)-1] == 'UNCH':
-                all['OGPUT'][cur_key]['DATA'].append(
+                all['Put'][cur_key]['Data'].append(
                     (l[0], int(l[len(l)-2]), l[len(l)-1]))
             else:
-                all['OGPUT'][cur_key]['DATA'].append(
+                all['Put'][cur_key]['Data'].append(
                     (l[0], int(l[len(l)-3]), l[len(l)-2]+l[len(l)-1]))
         else:
             if l[0][3:5].isdigit():
                 cur_key = l[0]
-                if cur_key not in all['OGPUT']:
-                    all['OGPUT'][cur_key] = {'TOTAL': [], 'DATA': []}
+                if cur_key not in all['Put']:
+                    all['Put'][cur_key] = {'Total': [], 'Data': []}
             elif l[0] == 'TOTAL':
                 total = l[len(l)-2]
                 change = l[len(l)-1]
                 if not total[len(total)-1].isdigit():
                     change = total[len(total)-1] + change
                     total = total[:len(total)-1]
-                all['OGPUT'][cur_key]['TOTAL'] = [total, change]
+                all['Put'][cur_key]['Total'] = [total, change]
 
 
 def Call(all, page_data):
@@ -94,23 +94,23 @@ def Call(all, page_data):
             if l[0].isdigit() == False:
                 continue
             if l[len(l)-1] == 'UNCH':
-                all['OGCALL'][cur_key]['DATA'].append(
+                all['Call'][cur_key]['Data'].append(
                     (l[0], int(l[len(l)-2]), l[len(l)-1]))
             else:
-                all['OGCALL'][cur_key]['DATA'].append(
+                all['Call'][cur_key]['Data'].append(
                     (l[0], int(l[len(l)-3]), l[len(l)-2]+l[len(l)-1]))
         else:
             if l[0][3:5].isdigit():
                 cur_key = l[0]
-                if cur_key not in all['OGCALL']:
-                    all['OGCALL'][cur_key] = {'TOTAL': [], 'DATA': []}
+                if cur_key not in all['Call']:
+                    all['Call'][cur_key] = {'Total': [], 'Data': []}
             elif l[0] == 'TOTAL':
                 total = l[len(l)-2]
                 change = l[len(l)-1]
                 if not total[len(total)-1].isdigit():
                     change = total[len(total)-1] + change
                     total = total[:len(total)-1]
-                all['OGCALL'][cur_key]['TOTAL'] = [total, change]
+                all['Call'][cur_key]['Total'] = [total, change]
 
 
 if __name__ == '__main__':
