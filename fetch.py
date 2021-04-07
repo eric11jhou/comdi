@@ -1,4 +1,4 @@
-import requests
+import urllib.request
 import json
 import pdfplumber
 from apscheduler.schedulers.blocking import BlockingScheduler
@@ -6,17 +6,18 @@ from datetime import datetime
 
 
 def main():
-    scheduler = BlockingScheduler()
-    scheduler.add_job(fetch, 'cron', hour=22, minute=13)
-    scheduler.start()
+    fetch()
 
 
 def fetch():
     all = {'Put': {}, 'Call': {}}
-    resp = requests.get(
-        'https://www.cmegroup.com/daily_bulletin/current/Section64_Metals_Option_Products.pdf')
+    user_agent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
+    headers = {'User-Agent': user_agent}
+    req = urllib.request.Request(
+        url='https://www.cmegroup.com/daily_bulletin/current/Section64_Metals_Option_Products.pdf', headers=headers)
+    resp = urllib.request.urlopen(req)
     with open('Section64_Metals_Option_Products.pdf', 'wb') as f:
-        f.write(resp.content)
+        f.write(resp.read())
     with pdfplumber.open(r'Section64_Metals_Option_Products.pdf') as pdf:
         for page in pdf.pages:
             page_data = page.extract_text()
