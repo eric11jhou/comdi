@@ -9,33 +9,23 @@ import (
 	"math"
 	"net/http"
 	"os"
-<<<<<<< HEAD
 	"path/filepath"
 	"strconv"
 	"time"
 
 	"github.com/eric11jhou/comdi/xls"
-=======
-
->>>>>>> 2ec5a8aeb0f5c2d365ccc49e1c9f9113dda4982f
 	"github.com/gin-gonic/gin"
 )
 
 type Option struct {
-<<<<<<< HEAD
-	Put  One `json:"Put"`
-	Call One `json:"Call"`
-=======
 	Time string `json:"Time"`
 	Put  One    `json:"Put"`
 	Call One    `json:"Call"`
->>>>>>> 2ec5a8aeb0f5c2d365ccc49e1c9f9113dda4982f
 }
 
 type One struct {
 	Total []interface{}   `json:"Total"`
 	Rank  [][]interface{} `json:"Rank"`
-<<<<<<< HEAD
 }
 
 var CFTC_FILENAME = "com_disagg_xls_2021.zip"
@@ -54,8 +44,6 @@ type CFTCData struct {
 	Diff                    int     `json:"diff"`
 	ChangePerWeek           int     `json:"change_per_week"`
 	Percent                 float64 `json:"percent"`
-=======
->>>>>>> 2ec5a8aeb0f5c2d365ccc49e1c9f9113dda4982f
 }
 
 func main() {
