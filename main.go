@@ -97,7 +97,6 @@ func main() {
 	})
 	r.Run(":8080")
 }
-<<<<<<< HEAD
 
 func cron1d() {
 	fetchCFTC()
@@ -249,5 +248,3 @@ func unzip(zipFile string, destDir string) error {
 	}
 	return nil
 }
-=======
->>>>>>> 2ec5a8aeb0f5c2d365ccc49e1c9f9113dda4982f
