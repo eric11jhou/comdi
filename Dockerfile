@@ -9,4 +9,6 @@ WORKDIR /app
 RUN chmod a+x run.sh
 RUN pip3 install -r requirements.txt
 
+EXPOSE 80
+
 ENTRYPOINT ["./run.sh"]
