@@ -3,20 +3,13 @@ import urllib.request
 import ssl
 import json
 import pdfplumber
-from apscheduler.schedulers.blocking import BlockingScheduler
 from datetime import datetime
 
 
 def main():
     print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), '開始運行')
     ssl._create_default_https_context = ssl._create_unverified_context
-    fetcher = Fetcher()
-    fetcher.fetch()
-
-    scheduler = BlockingScheduler()
-    scheduler.add_job(new_fetch, 'cron', hour=16, minute=0)
-    scheduler.start()
-
+    new_fetch()
 
 def new_fetch():
     fetcher = Fetcher()
