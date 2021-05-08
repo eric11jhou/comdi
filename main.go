@@ -32,6 +32,7 @@ var CFTC_FILENAME = "com_disagg_xls_2021.zip"
 var CFTC_XLSNAME = "c_year.xls"
 
 type CFTD struct {
+	Time  string      `time`
 	Datas []*CFTCData `json:"datas"`
 }
 
@@ -164,6 +165,7 @@ func fetchCFTC() {
 				CFTCDatas[i].Percent = math.Abs(float64(CFTCDatas[i].ChangePerWeek) / float64(CFTCDatas[i-1].Diff))
 			}
 			CFTD := &CFTD{
+				Time:  time.Now().Format("2006-01-02 15:04:05"),
 				Datas: CFTCDatas,
 			}
 			datasJSON, _ := json.Marshal(CFTD)
