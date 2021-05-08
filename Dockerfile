@@ -9,6 +9,12 @@ WORKDIR /app
 RUN chmod a+x run.sh
 RUN pip3 install -r requirements.txt
 
+COPY cron_job /etc/cron.d/cron_job
+
+RUN chmod 0644 /etc/cron.d/cron_job
+
+RUN crontab /etc/cron.d/cron_job
+
 EXPOSE 80
 
 ENTRYPOINT ["./run.sh"]
