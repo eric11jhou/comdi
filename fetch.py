@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 def main():
-    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), '開始運行')
+    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), '開始抓取資料')
     ssl._create_default_https_context = ssl._create_unverified_context
     new_fetch()
 
