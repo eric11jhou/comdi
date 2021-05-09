@@ -1,5 +1,7 @@
 FROM python:3.9-buster
 
+RUN apt-get update && apt-get -y install cron
+
 COPY release/linux/amd64/server /app/
 COPY *.py /app/
 COPY requirements.txt /app
