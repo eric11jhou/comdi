@@ -9,6 +9,7 @@ import (
 	"math"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -88,14 +89,33 @@ func main() {
 }
 
 func cron1d() {
+	execPy()
 	fetchCFTC()
 	for {
 		now := time.Now()
 		next := now.Add(time.Hour * 24)
-		next = time.Date(next.Year(), next.Month(), next.Day(), 0, 0, 0, 0, next.Location())
+		next = time.Date(next.Year(), next.Month(), next.Day(), 16, 0, 0, 0, next.Location())
 		t := time.NewTimer(next.Sub(now))
 		<-t.C
+		go execPy()
 		go fetchCFTC()
+	}
+}
+
+func execPy() {
+	fmt.Println("Option開始更新: ", time.Now())
+	cmd := exec.Command("python3", "fetch.py")
+	_, err := cmd.StdoutPipe()
+	if err != nil {
+		fmt.Println(err)
+	}
+	_, err = cmd.StderrPipe()
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = cmd.Start()
+	if err != nil {
+		fmt.Println(err)
 	}
 }
 
