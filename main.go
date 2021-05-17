@@ -90,6 +90,9 @@ func main() {
 
 func cron1d() {
 	execPy()
+	t := time.NewTimer(time.Minute * 5)
+	<-t.C
+	execPy()
 	fetchCFTC()
 	for {
 		now := time.Now()

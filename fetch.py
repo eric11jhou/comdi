@@ -25,7 +25,12 @@ class Fetcher:
         user_agent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
         headers = {'User-Agent': user_agent}
         req = urllib.request.Request(
-            url='https://www.cmegroup.com/daily_bulletin/current/Section64_Metals_Option_Products.pdf', headers=headers)
+            url='https://www.cmegroup.com/daily_bulletin/current/Section64_Metals_Option_Products.pdf', headers = {
+                'Connection': 'Keep-Alive',
+                'Accept': 'text/html, application/xhtml+xml, */*',
+                'Accept-Language': 'en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko'
+            })
         resp = urllib.request.urlopen(req)
         with open('Section64_Metals_Option_Products.pdf', 'wb') as f:
             f.write(resp.read())
