@@ -90,9 +90,6 @@ func main() {
 
 func cron1d() {
 	execPy()
-	t := time.NewTimer(time.Minute * 5)
-	<-t.C
-	execPy()
 	fetchCFTC()
 	for {
 		now := time.Now()
@@ -106,9 +103,25 @@ func cron1d() {
 }
 
 func execPy() {
-	fmt.Println("Option開始更新: ", time.Now())
-	cmd := exec.Command("python3", "fetch.py")
+	fmt.Println("Option PDF下載: ", time.Now())
+	cmd := exec.Command("sh", "cme.sh")
 	_, err := cmd.StdoutPipe()
+	if err != nil {
+		fmt.Println(err)
+	}
+	_, err = cmd.StderrPipe()
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = cmd.Start()
+	if err != nil {
+		fmt.Println(err)
+	}
+	t := time.NewTimer(time.Second * 5)
+	<-t.C
+	fmt.Println("Option開始更新: ", time.Now())
+	cmd = exec.Command("python3", "fetch.py")
+	_, err = cmd.StdoutPipe()
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+exec curl 'https://www.cmegroup.com/daily_bulletin/current/Section64_Metals_Option_Products.pdf' \
+  -H 'Connection: keep-alive' \
+  -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'Upgrade-Insecure-Requests: 1' \
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36' \
+  -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' \
+  -H 'Sec-Fetch-Site: none' \
+  -H 'Sec-Fetch-Mode: navigate' \
+  -H 'Sec-Fetch-User: ?1' \
+  -H 'Sec-Fetch-Dest: document' \
+  -H 'Accept-Language: zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7' \
+  -H $'Cookie: kppid=fc5fR3jGDeh; _gcl_au=1.1.2046706025.1621225489; _gid=GA1.2.1374608558.1621225490; _fbp=fb.1.1621225491310.909518316; _CEFT=Q%3D%3D%3D; cmeConsentCookie=true; login-token=3d9744f0-a378-4c64-a269-46cd94fb457b%3a5de88b0b-7f3c-45ed-abed-0413ab738eda_0f2c174b94e8d06f%3acrx.default; cmeRegion=east; AWSELB=C36DEB6B0C7158B8F2EACA9F65F7BDA2BCADD094FB2D0B6026EA4B0B3C14BC55CDC154A49BA3E53F721C719A6A1EF53463BB3B93D8300BB540163D46B8AC220CB5536ABFA2059CC1E0012DA9AE8F8553E32E1FEF15; __Secure-Fgp=17FED5D6FAC8EA0D1ABA94FD9C8B353280D2ED04436B547B82989C8107B5ED9D684FCCB7EC558840CE46C7B38A7B6A04F751; userId=154784; cmeToken=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6Impob3UiLCJjb3VudHJ5IjoiVFciLCJmaXN0TmFtZSI6ImJvemUiLCJjb21wYW55VHlwZSI6IkZpblRlY2giLCJ1c2VyRmluZ2VycHJpbnQiOiJDMThEMTUwMkM5NzBEMzk1RUE0QzdDRTc1QzFERkNDQUIzMjlFQTc1MzkwNTEyMjA1MjExMjVFNUVGRjY5N0JEIiwiaXNzIjoiYXV0aDAiLCJ1c2VySWQiOiIxNTQ3ODQiLCJjcmVhdGVkRGF0ZSI6MTYyMTIzNTM1NywidW5vSWQiOiJVUjAwMDI2NDEzNSIsImpvYlJvbGUiOiJUZWNobm9sb2d5IiwiY29tcGFueSI6Im90c28gZmludGVjaCIsInVzZXJUeXBlIjoiQiIsImV4cCI6MTY1Mjc3MTM1NywiZW1haWwiOiJlNTAzMTBAZ21haWwuY29tIn0.raCWrGLEVyuJBV0bhk0jFSDdgqbHfv1EoP0eW-55zyM; userinfo={"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6Impob3UiLCJjb3VudHJ5IjoiVFciLCJmaXN0TmFtZSI6ImJvemUiLCJjb21wYW55VHlwZSI6IkZpblRlY2giLCJ1c2VyRmluZ2VycHJpbnQiOiJDMThEMTUwMkM5NzBEMzk1RUE0QzdDRTc1QzFERkNDQUIzMjlFQTc1MzkwNTEyMjA1MjExMjVFNUVGRjY5N0JEIiwiaXNzIjoiYXV0aDAiLCJ1c2VySWQiOiIxNTQ3ODQiLCJjcmVhdGVkRGF0ZSI6MTYyMTIzNTM1NywidW5vSWQiOiJVUjAwMDI2NDEzNSIsImpvYlJvbGUiOiJUZWNobm9sb2d5IiwiY29tcGFueSI6Im90c28gZmludGVjaCIsInVzZXJUeXBlIjoiQiIsImV4cCI6MTY1Mjc3MTM1NywiZW1haWwiOiJlNTAzMTBAZ21haWwuY29tIn0.raCWrGLEVyuJBV0bhk0jFSDdgqbHfv1EoP0eW-55zyM","userId":"154784","userName":"boze+jhou","onePass":"UR000264135","email":"e50310@gmail.com","firstName":"boze","lastName":"jhou","firstLogIn":true,"jobRole":"Technology","company":"otso+fintech","companyType":"FinTech","country":"TW","isLite":true,"loginFrom":"/registration-thank-you.html?email=e50310@gmail.com","hashedEmail":"b50e18b6b55386e4b10ea9539a04180f9c5eeb5e40116d8759a9e1cfcce268f8"}; loginStatus=Mon May 17 2021 15:09:19 GMT+0800 (å\u008f°åŒ—æ¨™æº–æ™‚é–“); isLoggedInHere=true; pardotLoginCookie=%7B%22date%22:%22Tue%20May%2017%202022%2015:11:49%20GMT+0800%20(%E5%8F%B0%E5%8C%97%E6%A8%99%E6%BA%96%E6%99%82%E9%96%93)%22,%22newRegistration%22:%20%22false%22%7D; __atssc=google%3B1; __atuvc=10%7C20; _ga=GA1.2.976213042.1621225490; _ga_L69G7D7MMN=GS1.1.1621235105.3.1.1621237260.0' \
+  -H 'If-None-Match: "581545bcc40a34120371109dc27e7ef6"' \
+  -H 'If-Modified-Since: Sat, 15 May 2021 03:00:36 GMT' \
+  --compressed --output Section64_Metals_Option_Products.pdf -H "X-Forwarded-For: 1.171.66.167"

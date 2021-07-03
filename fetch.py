@@ -22,18 +22,6 @@ class Fetcher:
         self.all = {'Put': {}, 'Call': {}}
 
     def fetch(self):
-        user_agent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
-        headers = {'User-Agent': user_agent}
-        req = urllib.request.Request(
-            url='https://www.cmegroup.com/daily_bulletin/current/Section64_Metals_Option_Products.pdf', headers = {
-                'Connection': 'Keep-Alive',
-                'Accept': 'text/html, application/xhtml+xml, */*',
-                'Accept-Language': 'en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko'
-            })
-        resp = urllib.request.urlopen(req)
-        with open('Section64_Metals_Option_Products.pdf', 'wb') as f:
-            f.write(resp.read())
         with pdfplumber.open(r'Section64_Metals_Option_Products.pdf') as pdf:
             for page in pdf.pages:
                 page_data = page.extract_text()
@@ -44,6 +32,8 @@ class Fetcher:
         for m in self.all['Put']:
             data = self.all['Put'][m]['Data']
             data.sort(key=lambda s: s[1], reverse=True)
+            if data[0][1] == 0:
+                continue
             result['Put'] = {
                 'Total': self.all['Put'][m]['Total'],
                 'Rank': data[:6],
@@ -52,6 +42,8 @@ class Fetcher:
         for m in self.all['Call']:
             data = self.all['Call'][m]['Data']
             data.sort(key=lambda s: s[1], reverse=True)
+            if data[0][1] == 0:
+                continue
             result['Call'] = {
                 'Total': self.all['Call'][m]['Total'],
                 'Rank': data[:6],
