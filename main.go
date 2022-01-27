@@ -29,7 +29,8 @@ type One struct {
 	Rank  [][]interface{} `json:"Rank"`
 }
 
-var CFTC_FILENAME = "com_disagg_xls_2021.zip"
+var CFTC_FILENAME = "com_disagg_xls_2022.zip"
+var CFTC_FILENAME_LAST = "com_disagg_xls_2021.zip"
 var CFTC_XLSNAME = "c_year.xls"
 
 type CFTD struct {
@@ -136,7 +137,7 @@ func execPy() {
 }
 
 func fetchCFTC() {
-	err := downloadCFTC()
+	err := downloadCFTC(CFTC_FILENAME)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -146,6 +147,8 @@ func fetchCFTC() {
 	}
 	if xlFile, err := xls.Open(CFTC_XLSNAME, "utf-8"); err == nil {
 		if sheet1 := xlFile.GetSheet(0); sheet1 != nil {
+			CFTCDatas := make([]*CFTCData, 0)
+
 			row1 := sheet1.Row(0)
 			DateIndex := 0
 			MMoneyPositionLongAllIndex := 0
@@ -173,7 +176,6 @@ func fetchCFTC() {
 					break
 				}
 			}
-			CFTCDatas := make([]*CFTCData, 0)
 			for i := 1; i <= int(sheet1.MaxRow); i++ {
 				row := sheet1.Row(i)
 				if row.Col(0) == "GOLD - COMMODITY EXCHANGE INC." {
@@ -193,26 +195,85 @@ func fetchCFTC() {
 					}, CFTCDatas...)
 				}
 			}
-			for i := range CFTCDatas {
-				if i == 0 {
-					continue
+			// 2
+			err := downloadCFTC(CFTC_FILENAME_LAST)
+			if err != nil {
+				fmt.Println(err)
+			}
+			err = unzip(CFTC_FILENAME_LAST, "./")
+			if err != nil {
+				fmt.Println(err)
+			}
+			if xlFile, err := xls.Open(CFTC_XLSNAME, "utf-8"); err == nil {
+				if sheet1 := xlFile.GetSheet(0); sheet1 != nil {
+					row1 := sheet1.Row(0)
+					DateIndex := 0
+					MMoneyPositionLongAllIndex := 0
+					NonReptPositionLongAllIndex := 0
+					MMoneyPositionShortAllIndex := 0
+					NonReptPositionShortAllIndex := 0
+					for i := 0; i <= row1.LastCol(); i++ {
+						switch row1.Col(i) {
+						case "Report_Date_as_MM_DD_YYYY":
+							DateIndex = i
+						case "M_Money_Positions_Long_ALL":
+							MMoneyPositionLongAllIndex = i
+						case "NonRept_Positions_Long_All":
+							NonReptPositionLongAllIndex = i
+						case "M_Money_Positions_Short_ALL":
+							MMoneyPositionShortAllIndex = i
+						case "NonRept_Positions_Short_All":
+							NonReptPositionShortAllIndex = i
+						}
+						if DateIndex != 0 &&
+							MMoneyPositionLongAllIndex != 0 &&
+							NonReptPositionLongAllIndex != 0 &&
+							MMoneyPositionShortAllIndex != 0 &&
+							NonReptPositionShortAllIndex != 0 {
+							break
+						}
+					}
+					for i := 1; i <= int(sheet1.MaxRow); i++ {
+						row := sheet1.Row(i)
+						if row.Col(0) == "GOLD - COMMODITY EXCHANGE INC." {
+							iMMoneyPositionLongAll, _ := strconv.Atoi(row.Col(MMoneyPositionLongAllIndex))
+							iNonReptPositionLongAll, _ := strconv.Atoi(row.Col(NonReptPositionLongAllIndex))
+							iMMoneyPositionShortAll, _ := strconv.Atoi(row.Col(MMoneyPositionShortAllIndex))
+							iNonReptPositionShortAll, _ := strconv.Atoi(row.Col(NonReptPositionShortAllIndex))
+							CFTCDatas = append([]*CFTCData{
+								&CFTCData{
+									Date:                    row.Col(DateIndex),
+									MMoneyPositionLongAll:   iMMoneyPositionLongAll,
+									NonReptPositionLongAll:  iNonReptPositionLongAll,
+									MMoneyPositionShortAll:  iMMoneyPositionShortAll,
+									NonReptPositionShortAll: iNonReptPositionShortAll,
+									Diff:                    iMMoneyPositionLongAll + iNonReptPositionLongAll - iMMoneyPositionShortAll - iNonReptPositionShortAll,
+								},
+							}, CFTCDatas...)
+						}
+					}
+					for i := range CFTCDatas {
+						if i == 0 {
+							continue
+						}
+						CFTCDatas[i].ChangePerWeek = CFTCDatas[i].Diff - CFTCDatas[i-1].Diff
+						CFTCDatas[i].Percent = math.Abs(float64(CFTCDatas[i].ChangePerWeek) / float64(CFTCDatas[i-1].Diff))
+					}
+					CFTD := &CFTD{
+						Time:  time.Now().Format("2006-01-02 15:04:05"),
+						Datas: CFTCDatas,
+					}
+					datasJSON, _ := json.Marshal(CFTD)
+					ioutil.WriteFile("cftc.json", datasJSON, 0644)
+					fmt.Println("CFTC已更新: ", time.Now())
 				}
-				CFTCDatas[i].ChangePerWeek = CFTCDatas[i].Diff - CFTCDatas[i-1].Diff
-				CFTCDatas[i].Percent = math.Abs(float64(CFTCDatas[i].ChangePerWeek) / float64(CFTCDatas[i-1].Diff))
 			}
-			CFTD := &CFTD{
-				Time:  time.Now().Format("2006-01-02 15:04:05"),
-				Datas: CFTCDatas,
-			}
-			datasJSON, _ := json.Marshal(CFTD)
-			ioutil.WriteFile("cftc.json", datasJSON, 0644)
-			fmt.Println("CFTC已更新: ", time.Now())
 		}
 	}
 }
 
-func downloadCFTC() error {
-	specUrl := fmt.Sprintf("https://www.cftc.gov/files/dea/history/%s", CFTC_FILENAME)
+func downloadCFTC(filename string) error {
+	specUrl := fmt.Sprintf("https://www.cftc.gov/files/dea/history/%s", filename)
 	resp, err := http.Get(specUrl)
 	if err != nil {
 		return err
@@ -224,7 +285,7 @@ func downloadCFTC() error {
 	}
 
 	// Create the file
-	out, err := os.Create(CFTC_FILENAME)
+	out, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
