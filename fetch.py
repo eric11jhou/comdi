@@ -51,7 +51,9 @@ class Fetcher:
             break
         try:
             with open('data.json', 'w', encoding='utf-8') as fs:
+                print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), '寫入檔案中!')
                 json.dump(result, fs)
+                print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), '寫入檔案完成!')
         except IOError as e:
             print(e)
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), '數據保存完成!')

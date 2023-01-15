@@ -29,8 +29,8 @@ type One struct {
 	Rank  [][]interface{} `json:"Rank"`
 }
 
-var CFTC_FILENAME = "com_disagg_xls_2022.zip"
-var CFTC_FILENAME_LAST = "com_disagg_xls_2021.zip"
+var CFTC_FILENAME = "com_disagg_xls_2023.zip"
+var CFTC_FILENAME_LAST = "com_disagg_xls_2022.zip"
 var CFTC_XLSNAME = "c_year.xls"
 
 type CFTD struct {
