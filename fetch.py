@@ -97,7 +97,9 @@ class Fetcher:
             return
         end = page_data.find('SILVER OPTIONS ON FUTURES')
         if end == -1:
-            end = page_data.find('THE INFORMATION')
+            end = page_data.find('GWW')
+            if end == -1:
+                end = page_data.find('THE INFORMATION')
         lines = page_data[start:end].splitlines()
         for line in lines:
             l = line.split()
