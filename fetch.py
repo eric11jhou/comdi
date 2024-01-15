@@ -95,7 +95,7 @@ class Fetcher:
         start = page_data.find('OG CALL COMEX GOLD OPTIONS')
         if start == -1:
             return
-        end = page_data.find('SILVER OPTIONS ON FUTURES')
+        end = page_data.find('MICRO GOLD WEEKLY MONDAY OPTION')
         if end == -1:
             end = page_data.find('GWW')
             if end == -1:
@@ -125,6 +125,7 @@ class Fetcher:
                         change = total[len(total)-1] + change
                         total = total[:len(total)-1]
                     self.all['Call'][self.cur_key]['Total'] = [total, change]
+                    print(self.cur_key, self.all['Call'][self.cur_key]['Total'])
 
 
 if __name__ == '__main__':
